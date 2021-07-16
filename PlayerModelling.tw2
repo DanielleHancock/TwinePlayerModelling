@@ -1,0 +1,1500 @@
+:: StoryTitle
+The Lost Treasure of Bloomrane Cavern (Path B)
+
+:: UserStylesheet[stylesheet]
+#menu-core {
+	display: none;
+}
+
+::StoryIncludes
+enemy_near_many.tw2
+enemy_near_few.tw2
+enemy_far_many.tw2
+enemy_far_few.tw2
+town.tw2
+shop.tw2
+save_woman_from_bandits.tw2
+loot_camp.tw2
+puzzle.tw2
+
+::StoryCaption
+Health: $player_health (out of 20)
+
+Enemy's Health: $encounter["enemy_health"]
+
+Inventory:
+$inventory["gold"] gold
+<<if $inventory["magicSword"] > 0>>$inventory["magicSword"] Magic Sword <<else>> Rusty Sword <<endif>>
+<<if $inventory["magicBow"] > 0>>$inventory["magicBow"] Magic Bow <<else>> Old Bow <<endif>>
+<<if $inventory["magicBook"] > 0>>$inventory["magicBook"] Powerful Spell Book <<else>> Weak Spell Book <<endif>>
+<<if $inventory["armor"] > 0>> $inventory["armor"] Armor <<endif>>
+<<if $inventory["healingPotion"] > 0>> $inventory["healingPotion"] Healing Potion<<if $inventory["healingPotion"] > 1>>s<<endif>><<endif>>
+
+Class: $model
+
+
+:: StoryInit
+
+<<set $encounters to 0>>
+<<set $inventory to {}>>
+<<set $inventory["magicSword"] to 0>>
+<<set $inventory["magicBow"] to 0>>
+<<set $inventory["magicBook"] to 0>>
+<<set $inventory["armor"] to 0>>
+<<set $inventory["healingPotion"] to 0>>
+<<set $inventory["gold"] to 5>>
+<<set $choices to {}>>
+<<set $choices["near"] to 0>>
+<<set $choices["far"] to 0>>
+<<set $choices["many"] to 0>>
+<<set $choices["few"] to 0>>
+<<set $choices["loot"] to 0>>
+<<set $choices["help"] to 0>>
+<<set $choices["magicSword"] to 0>>
+<<set $choices["magicBow"] to 0>>
+<<set $choices["magicBook"] to 0>>
+<<set $choices["gold"] to 0>>
+<<set $choices["weapon"] to 0>>
+<<set $choices["sword"] to 0>>
+<<set $choices["bow"] to 0>>
+<<set $choices["magic"] to 0>>
+<<set $choices["hide"] to 0>>
+<<set $choices["wait"] to 0>>
+<<set $choices["sneak"] to 0>>
+<<set $choices["talk"] to 0>>
+<<set $choices["bribe"] to 0>>
+<<set $choices["runAway"] to 0>>
+<<set $model to "none">>
+<<set $player_model to {}>>
+<<set $player_model["enemy_near_few"] to 1>>
+<<set $player_model["enemy_near_many"] to 1>>
+<<set $player_model["enemy_far_few"] to 1>>
+<<set $player_model["enemy_far_many"] to 1>>
+<<set $player_model["town_shop"] to 1>>
+<<set $player_model["help"] to 1>>
+<<set $player_model["loot"] to 1>>
+<<set $player_model["puzzle"] to 1>>
+<<set $player_model["magicSword"] to 1>>
+<<set $player_model["magicBow"] to 1>>
+<<set $player_model["magicBook"] to 1>>
+<<set $player_model["talk"] to 1>>
+<<set $player_model["bribe"] to 1>>
+<<set $player_model["sneak"] to 1>>
+<<set $player_model["wait"] to 1>>
+<<set $ogre to ["Ogre", "an Ogre", "a massive Ogre"]>>
+<<set $giant to ["Giant", "a Giant", "a towering Giant"]>>
+<<set $cyclops to ["Cyclops", "a Cyclops", "a powerful Cyclops"]>>
+<<set $ent to ["Treant", "a Treant", "an imposing Treant"]>>
+<<set $near_few_list to [$ogre, $giant, $cyclops, $ent]>>
+<<set $giraffes to ["Giraffes", "Giraffes", "carnivorous fantasy Giraffes"]>>
+<<set $wolves to ["Wolves", "Wolves", "vicious Wolves"]>>
+<<set $unicorns to ["Unicorns", "Unicorns", "bloodthirsty Unicorns"]>>
+<<set $wyverns to ["Wyverns", "Wyverns", "snarling Wyverns"]>>
+<<set $near_many_list to [$giraffes, $wolves, $unicorns, $wyverns]>>
+<<set $lamia to ["Lamia", "a Lamia", "a slithery Lamia"]>>
+<<set $harpy to ["Harpy", "a Harpy", "a sleek Harpy"]>>
+<<set $werewolf to ["Werewolf", "a Werewolf", "a muscular Werewolf"]>>
+<<set $troll to ["Troll", "a Troll", "a mossy troll"]>>
+<<set $far_few_list to [$lamia, $harpy, $werewolf, $troll]>>
+<<set $goblins to ["Goblins", "Goblins", "rowdy Goblins"]>>
+<<set $kobolds to ["Kobolds", "Kobolds", "skittery Kobolds"]>>
+<<set $gnolls to ["Gnolls", "Gnolls", "howling Gnolls"]>>
+<<set $gnomes to ["Gnomes", "Gnomes", "crazed ex-Garden Gnomes"]>>
+<<set $far_many_list to [$goblins, $kobolds, $gnolls, $gnomes]>>
+<<set $adventurer_model to {}>>
+<<set $adventurer_model["enemy_near_few"] to 1>>
+<<set $adventurer_model["enemy_near_many"] to 1>>
+<<set $adventurer_model["enemy_far_few"] to 1>>
+<<set $adventurer_model["enemy_far_many"] to 1>>
+<<set $adventurer_model["town_shop"] to 1.25>>
+<<set $adventurer_model["help"] to 1>>
+<<set $adventurer_model["loot"] to .5>>
+<<set $adventurer_model["puzzle"] to 1.25>>
+<<set $adventurer_model["magicSword"] to 1.5>>
+<<set $adventurer_model["magicBow"] to 1>>
+<<set $adventurer_model["magicBook"] to .5>>
+<<set $adventurer_model["wait"] to .25>>
+<<set $adventurer_model["sneak"] to .25>>
+<<set $adventurer_model["talk"] to 1.75>>
+<<set $adventurer_model["bribe"] to 1.75>>
+<<set $adventurer_choices to {}>>
+<<set $adventurer_choices["near"] to 0.6>>
+<<set $adventurer_choices["far"] to 0.4>>
+<<set $adventurer_choices["many"] to 0.4>>
+<<set $adventurer_choices["few"] to 0.6>>
+<<set $adventurer_choices["loot"] to 0.4>>
+<<set $adventurer_choices["help"] to 0.6>>
+<<set $adventurer_choices["magicSword"] to 0.6>>
+<<set $adventurer_choices["magicBow"] to 0.4>>
+<<set $adventurer_choices["magicBook"] to 0.2>>
+<<set $adventurer_choices["gold"] to 0>>
+<<set $adventurer_choices["weapon"] to 0.4>>
+<<set $adventurer_choices["sword"] to 0.6>>
+<<set $adventurer_choices["bow"] to 1>>
+<<set $adventurer_choices["magic"] to 0.8>>
+<<set $adventurer_choices["hide"] to 0.2>>
+<<set $adventurer_choices["wait"] to 0>>
+<<set $adventurer_choices["sneak"] to 0>>
+<<set $adventurer_choices["talk"] to 2.8>>
+<<set $adventurer_choices["bribe"] to 1.4>>
+<<set $adventurer_choices["runAway"] to 0.4>>
+<<set $archer_model to {}>>
+<<set $archer_model["enemy_near_few"] to 1>>
+<<set $archer_model["enemy_near_many"] to .5>>
+<<set $archer_model["enemy_far_few"] to 1.5>>
+<<set $archer_model["enemy_far_many"] to 1>>
+<<set $archer_model["town_shop"] to 1>>
+<<set $archer_model["help"] to 1.5>>
+<<set $archer_model["loot"] to 1>>
+<<set $archer_model["puzzle"] to .5>>
+<<set $archer_model["magicSword"] to .5>>
+<<set $archer_model["magicBow"] to 2>>
+<<set $archer_model["magicBook"] to .5>>
+<<set $archer_model["wait"] to 1>>
+<<set $archer_model["sneak"] to 1.5>>
+<<set $archer_model["talk"] to 1>>
+<<set $archer_model["bribe"] to .5>>
+<<set $archer_choices to {}>>
+<<set $archer_choices["near"] to 1>>
+<<set $archer_choices["far"] to 0>>
+<<set $archer_choices["many"] to 0>>
+<<set $archer_choices["few"] to 1>>
+<<set $archer_choices["loot"] to 0>>
+<<set $archer_choices["help"] to 1>>
+<<set $archer_choices["magicSword"] to 0>>
+<<set $archer_choices["magicBow"] to 1>>
+<<set $archer_choices["magicBook"] to 0>>
+<<set $archer_choices["gold"] to 0>>
+<<set $archer_choices["weapon"] to 0>>
+<<set $archer_choices["sword"] to 0>>
+<<set $archer_choices["bow"] to 1>>
+<<set $archer_choices["magic"] to 0>>
+<<set $archer_choices["hide"] to 1.3333333>>
+<<set $archer_choices["wait"] to 0.6666667>>
+<<set $archer_choices["sneak"] to 1.3333333>>
+<<set $archer_choices["talk"] to 1>>
+<<set $archer_choices["bribe"] to 0.6666667>>
+<<set $archer_choices["runAway"] to 0>>
+<<set $thief_model to {}>>
+<<set $thief_model["enemy_near_few"] to .5>>
+<<set $thief_model["enemy_near_many"] to .5>>
+<<set $thief_model["enemy_far_few"] to 1.5>>
+<<set $thief_model["enemy_far_many"] to 1.5>>
+<<set $thief_model["town_shop"] to 1.5>>
+<<set $thief_model["help"] to .5>>
+<<set $thief_model["loot"] to 1.5>>
+<<set $thief_model["puzzle"] to .5>>
+<<set $thief_model["magicSword"] to .5>>
+<<set $thief_model["magicBow"] to 1.5>>
+<<set $thief_model["magicBook"] to 1>>
+<<set $thief_model["wait"] to .75>>
+<<set $thief_model["sneak"] to 2>>
+<<set $thief_model["talk"] to 1>>
+<<set $thief_model["bribe"] to .25>>
+<<set $thief_choices to {}>>
+<<set $thief_choices["near"] to 0.2>>
+<<set $thief_choices["far"] to 0.8>>
+<<set $thief_choices["many"] to 0.8>>
+<<set $thief_choices["few"] to 0.2>>
+<<set $thief_choices["loot"] to 0.6>>
+<<set $thief_choices["help"] to 0.4>>
+<<set $thief_choices["magicSword"] to 0.2>>
+<<set $thief_choices["magicBow"] to 0.6	>>
+<<set $thief_choices["magicBook"] to 0.4>>
+<<set $thief_choices["gold"] to 0>>
+<<set $thief_choices["weapon"] to 0>>
+<<set $thief_choices["sword"] to 0>>
+<<set $thief_choices["bow"] to 0.2>>
+<<set $thief_choices["magic"] to 0.2>>
+<<set $thief_choices["hide"] to 0.2>>
+<<set $thief_choices["wait"] to 3>>
+<<set $thief_choices["sneak"] to 2>>
+<<set $thief_choices["talk"] to 1.8>>
+<<set $thief_choices["bribe"] to 0.2>>
+<<set $thief_choices["runAway"] to 0>>
+<<set $diplomat_model to {}>>
+<<set $diplomat_model["enemy_near_few"] to .75>>
+<<set $diplomat_model["enemy_near_many"] to .75>>
+<<set $diplomat_model["enemy_far_few"] to .75>>
+<<set $diplomat_model["enemy_far_many"] to .75>>
+<<set $diplomat_model["town_shop"] to 2>>
+<<set $diplomat_model["help"] to 1.5>>
+<<set $diplomat_model["loot"] to .25>>
+<<set $diplomat_model["puzzle"] to 1.25>>
+<<set $diplomat_model["magicSword"] to 1.5>>
+<<set $diplomat_model["magicBow"] to .5>>
+<<set $diplomat_model["magicBook"] to 1>>
+<<set $diplomat_model["wait"] to .25>>
+<<set $diplomat_model["sneak"] to 1>>
+<<set $diplomat_model["talk"] to 2>>
+<<set $diplomat_model["bribe"] to .75>>
+<<set $diplomat_choices to {}>>
+<<set $diplomat_choices["near"] to .5>>
+<<set $diplomat_choices["far"] to .5>>
+<<set $diplomat_choices["many"] to .5>>
+<<set $diplomat_choices["few"] to .5>>
+<<set $diplomat_choices["loot"] to 0>>
+<<set $diplomat_choices["help"] to 1>>
+<<set $diplomat_choices["magicSword"] to .5>>
+<<set $diplomat_choices["magicBow"] to 0>>
+<<set $diplomat_choices["magicBook"] to 0.1666667>>
+<<set $diplomat_choices["gold"] to 0>>
+<<set $diplomat_choices["weapon"] to 0>>
+<<set $diplomat_choices["sword"] to 0.6666667>>
+<<set $diplomat_choices["bow"] to .5>>
+<<set $diplomat_choices["magic"] to .5>>
+<<set $diplomat_choices["hide"] to 1>>
+<<set $diplomat_choices["wait"] to 0.1666667>>
+<<set $diplomat_choices["sneak"] to 0.8333333>>
+<<set $diplomat_choices["talk"] to 2.166667>>
+<<set $diplomat_choices["bribe"] to 0.3333333>>
+<<set $diplomat_choices["runAway"] to 0.1666667>>
+<<set $mage_model to {}>>
+<<set $mage_model["enemy_near_few"] to .5>>
+<<set $mage_model["enemy_near_many"] to 1.25>>
+<<set $mage_model["enemy_far_few"] to .75>>
+<<set $mage_model["enemy_far_many"] to 1.5>>
+<<set $mage_model["town_shop"] to 1.5>>
+<<set $mage_model["help"] to 1>>
+<<set $mage_model["loot"] to .25>>
+<<set $mage_model["puzzle"] to 1.25>>
+<<set $mage_model["magicSword"] to .25>>
+<<set $mage_model["magicBow"] to .75>>
+<<set $mage_model["magicBook"] to 2>>
+<<set $mage_model["wait"] to .75>>
+<<set $mage_model["sneak"] to .5>>
+<<set $mage_model["talk"] to 1.5>>
+<<set $mage_model["bribe"] to 1.25>>
+<<set $mage_choices to {}>>
+<<set $mage_choices["near"] to 0.1666667>>
+<<set $mage_choices["far"] to 0.8333333>>
+<<set $mage_choices["many"] to 0.8333333>>
+<<set $mage_choices["few"] to 0.1666667>>
+<<set $mage_choices["loot"] to 0>>
+<<set $mage_choices["help"] to 1>>
+<<set $mage_choices["magicSword"] to 0>>
+<<set $mage_choices["magicBow"] to 0.6666667>>
+<<set $mage_choices["magicBook"] to 1>>
+<<set $mage_choices["gold"] to 0>>
+<<set $mage_choices["weapon"] to 0.3333333>>
+<<set $mage_choices["sword"] to 0>>
+<<set $mage_choices["bow"] to 0.3333333>>
+<<set $mage_choices["magic"] to 1.5>>
+<<set $mage_choices["hide"] to 0.8333333>>
+<<set $mage_choices["wait"] to 0.5>>
+<<set $mage_choices["sneak"] to 0.3333333>>
+<<set $mage_choices["talk"] to 1.166667>>
+<<set $mage_choices["bribe"] to 0.8333333>>
+<<set $mage_choices["runAway"] to 0>>
+<<set $fighter_model to {}>>
+<<set $fighter_model["enemy_near_few"] to 1.5>>
+<<set $fighter_model["enemy_near_many"] to 1.5>>
+<<set $fighter_model["enemy_far_few"] to 1.5>>
+<<set $fighter_model["enemy_far_many"] to 1.5>>
+<<set $fighter_model["town_shop"] to .5>>
+<<set $fighter_model["help"] to .75>>
+<<set $fighter_model["loot"] to .25>>
+<<set $fighter_model["puzzle"] to .5>>
+<<set $fighter_model["magicSword"] to 1>>
+<<set $fighter_model["magicBow"] to 1>>
+<<set $fighter_model["magicBook"] to 1>>
+<<set $fighter_model["wait"] to .5>>
+<<set $fighter_model["sneak"] to 1>>
+<<set $fighter_model["talk"] to 1.5>>
+<<set $fighter_model["bribe"] to 1>>
+<<set $fighter_choices to {}>>
+<<set $fighter_choices["near"] to 1>>
+<<set $fighter_choices["far"] to 0>>
+<<set $fighter_choices["many"] to 0>>
+<<set $fighter_choices["few"] to 1>>
+<<set $fighter_choices["loot"] to 0>>
+<<set $fighter_choices["help"] to 1>>
+<<set $fighter_choices["magicSword"] to 0>>
+<<set $fighter_choices["magicBow"] to 0>>
+<<set $fighter_choices["magicBook"] to 0>>
+<<set $fighter_choices["gold"] to 0>>
+<<set $fighter_choices["weapon"] to 0>>
+<<set $fighter_choices["sword"] to 6>>
+<<set $fighter_choices["bow"] to 6>>
+<<set $fighter_choices["magic"] to 2>>
+<<set $fighter_choices["hide"] to 1>>
+<<set $fighter_choices["wait"] to 0>>
+<<set $fighter_choices["sneak"] to 1>>
+<<set $fighter_choices["talk"] to 2>>
+<<set $fighter_choices["bribe"] to 1>>
+<<set $fighter_choices["runAway"] to 1>>
+
+
+:: Start
+<<silently>>
+<<set $player_health to 20>>
+<<set $encounter to {}>>
+<<set $encounter["enemy"] to "none">>
+<<set $encounter["enemy_article"] to "none">>
+<<set $encounter["enemy_description"] to "none">>
+<<set $encounter["enemy_health"] to 0>>
+<<set $encounter["enemy_damage"] to 0>>
+<<set $encounter["sword_damage"] to 0>>
+<<set $encounter["bow_damage"] to 0>>
+<<set $encounter["magic_damage"] to 0>>
+<<set $encounter["magic_sword_damage"] to 0>>
+<<set $encounter["magic_bow_damage"] to 0>>
+<<set $encounter["magic_book_damage"] to 0>>
+<<set $encounter["bribe"] to false>>
+<<set $encounter["talk"] to false>>
+<<set $encounter["sneak"] to false>>
+<<set $encounter["wait"] to false>>
+<<set $encounter["loot_1"] to "none">>
+<<set $encounter["gold_amount"] to 0>>
+<<set $encounter1 to {}>>
+<<set $encounter2 to {}>>
+
+<<endsilently>>
+This is Path B of The Lost Treasure of Bloomrane Cavern. We ask that you play both versions of the game. At the end of the game, you will be given a link to a survey about your enjoyment of the game.
+
+You are a brave adventurer, seeking fame and fortune by finding the lost gold of Bloomrane Cavern.
+
+[[Continue forward.|Next Encounter]]
+
+
+:: Next Encounter
+<<if $encounters >= 5>>
+You see the yawning mouth of a cave up ahead!
+
+[[Continue into Bloomrane Cavern|Win]]
+<<else>>
+
+<<if $encounters > 0>>
+<<silently>>
+<<set $choices_temp to {}>>
+<<set $choices_temp["near"] to $choices["near"] * (5/$encounters)>>
+<<set $choices_temp["far"] to $choices["far"] * (5/$encounters)>>
+<<set $choices_temp["many"] to $choices["many"] * (5/$encounters)>>
+<<set $choices_temp["few"] to $choices["few"] * (5/$encounters)>>
+<<set $choices_temp["loot"] to $choices["loot"] * (5/$encounters)>>
+<<set $choices_temp["help"] to $choices["help"] * (5/$encounters)>>
+<<set $choices_temp["magicSword"] to $choices["magicSword"] * (5/$encounters)>>
+<<set $choices_temp["magicBow"] to $choices["magicBow"] * (5/$encounters)>>
+<<set $choices_temp["magicBook"] to $choices["magicBook"] * (5/$encounters)>>
+<<set $choices_temp["gold"] to $choices["gold"] * (5/$encounters)>>
+<<set $choices_temp["weapon"] to $choices["weapon"] * (5/$encounters)>>
+<<set $choices_temp["sword"] to $choices["sword"] * (5/$encounters)>>
+<<set $choices_temp["bow"] to $choices["bow"] * (5/$encounters)>>
+<<set $choices_temp["magic"] to $choices["magic"] * (5/$encounters)>>
+<<set $choices_temp["hide"] to $choices["hide"] * (5/$encounters)>>
+<<set $choices_temp["wait"] to $choices["wait"] * (5/$encounters)>>
+<<set $choices_temp["sneak"] to $choices["sneak"] * (5/$encounters)>>
+<<set $choices_temp["talk"] to $choices["talk"] * (5/$encounters)>>
+<<set $choices_temp["bribe"] to $choices["bribe"] * (5/$encounters)>>
+<<set $choices_temp["runAway"] to $choices["runAway"] * (5/$encounters)>>
+
+<<set $distance to 0>>
+<<set $model to "none">>
+
+<<set $distance_temp to 0>>
+
+<<set $distance_temp to $distance_temp + (($choices_temp["near"] - $adventurer_choices["near"]) * ($choices_temp["near"] - $adventurer_choices["near"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["far"] - $adventurer_choices["far"]) * ($choices_temp["far"] - $adventurer_choices["far"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["many"] - $adventurer_choices["many"]) * ($choices_temp["many"] - $adventurer_choices["many"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["few"] - $adventurer_choices["few"]) * ($choices_temp["few"] - $adventurer_choices["few"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["loot"] - $adventurer_choices["loot"]) * ($choices_temp["loot"] - $adventurer_choices["loot"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["help"] - $adventurer_choices["help"]) * ($choices_temp["help"] - $adventurer_choices["help"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicSword"] - $adventurer_choices["magicSword"]) * ($choices_temp["magicSword"] - $adventurer_choices["magicSword"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicBow"] - $adventurer_choices["magicBow"]) * ($choices_temp["magicBow"] - $adventurer_choices["magicBow"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicBook"] - $adventurer_choices["magicBook"]) * ($choices_temp["magicBook"] - $adventurer_choices["magicBook"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["gold"] - $adventurer_choices["gold"]) * ($choices_temp["gold"] - $adventurer_choices["gold"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["weapon"] - $adventurer_choices["weapon"]) * ($choices_temp["weapon"] - $adventurer_choices["weapon"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["sword"] - $adventurer_choices["sword"]) * ($choices_temp["sword"] - $adventurer_choices["sword"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["bow"] - $adventurer_choices["bow"]) * ($choices_temp["bow"] - $adventurer_choices["bow"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["hide"] - $adventurer_choices["hide"]) * ($choices_temp["hide"] - $adventurer_choices["hide"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["wait"] - $adventurer_choices["wait"]) * ($choices_temp["wait"] - $adventurer_choices["wait"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["sneak"] - $adventurer_choices["sneak"]) * ($choices_temp["sneak"] - $adventurer_choices["sneak"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["talk"] - $adventurer_choices["talk"]) * ($choices_temp["talk"] - $adventurer_choices["talk"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["bribe"] - $adventurer_choices["bribe"]) * ($choices_temp["bribe"] - $adventurer_choices["bribe"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["runAway"] - $adventurer_choices["runAway"]) * ($choices_temp["runAway"] - $adventurer_choices["runAway"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magic"] - $adventurer_choices["magic"]) * ($choices_temp["magic"] - $adventurer_choices["magic"]))>>
+
+<<set $distance_temp to Math.sqrt($distance_temp)>>
+
+<<set $distance to $distance_temp>>
+<<set $model to "adventurer">>
+
+<<set $distance_temp to 0>>
+
+<<set $distance_temp to $distance_temp + (($choices_temp["near"] - $archer_choices["near"]) * ($choices_temp["near"] - $archer_choices["near"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["far"] - $archer_choices["far"]) * ($choices_temp["far"] - $archer_choices["far"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["many"] - $archer_choices["many"]) * ($choices_temp["many"] - $archer_choices["many"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["few"] - $archer_choices["few"]) * ($choices_temp["few"] - $archer_choices["few"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["loot"] - $archer_choices["loot"]) * ($choices_temp["loot"] - $archer_choices["loot"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["help"] - $archer_choices["help"]) * ($choices_temp["help"] - $archer_choices["help"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicSword"] - $archer_choices["magicSword"]) * ($choices_temp["magicSword"] - $archer_choices["magicSword"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicBow"] - $archer_choices["magicBow"]) * ($choices_temp["magicBow"] - $archer_choices["magicBow"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicBook"] - $archer_choices["magicBook"]) * ($choices_temp["magicBook"] - $archer_choices["magicBook"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["gold"] - $archer_choices["gold"]) * ($choices_temp["gold"] - $archer_choices["gold"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["weapon"] - $archer_choices["weapon"]) * ($choices_temp["weapon"] - $archer_choices["weapon"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["sword"] - $archer_choices["sword"]) * ($choices_temp["sword"] - $archer_choices["sword"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["bow"] - $archer_choices["bow"]) * ($choices_temp["bow"] - $archer_choices["bow"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["hide"] - $archer_choices["hide"]) * ($choices_temp["hide"] - $archer_choices["hide"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["wait"] - $archer_choices["wait"]) * ($choices_temp["wait"] - $archer_choices["wait"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["sneak"] - $archer_choices["sneak"]) * ($choices_temp["sneak"] - $archer_choices["sneak"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["talk"] - $archer_choices["talk"]) * ($choices_temp["talk"] - $archer_choices["talk"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["bribe"] - $archer_choices["bribe"]) * ($choices_temp["bribe"] - $archer_choices["bribe"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["runAway"] - $archer_choices["runAway"]) * ($choices_temp["runAway"] - $archer_choices["runAway"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magic"] - $archer_choices["magic"]) * ($choices_temp["magic"] - $archer_choices["magic"]))>>
+
+<<set $distance_temp to Math.sqrt($distance_temp)>>
+
+<<if $distance_temp < $distance>>
+<<set $distance to $distance_temp>>
+<<set $model to "archer">>
+<<endif>>
+
+<<set $distance_temp to 0>>
+
+<<set $distance_temp to $distance_temp + (($choices_temp["near"] - $thief_choices["near"]) * ($choices_temp["near"] - $thief_choices["near"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["far"] - $thief_choices["far"]) * ($choices_temp["far"] - $thief_choices["far"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["many"] - $thief_choices["many"]) * ($choices_temp["many"] - $thief_choices["many"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["few"] - $thief_choices["few"]) * ($choices_temp["few"] - $thief_choices["few"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["loot"] - $thief_choices["loot"]) * ($choices_temp["loot"] - $thief_choices["loot"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["help"] - $thief_choices["help"]) * ($choices_temp["help"] - $thief_choices["help"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicSword"] - $thief_choices["magicSword"]) * ($choices_temp["magicSword"] - $thief_choices["magicSword"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicBow"] - $thief_choices["magicBow"]) * ($choices_temp["magicBow"] - $thief_choices["magicBow"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicBook"] - $thief_choices["magicBook"]) * ($choices_temp["magicBook"] - $thief_choices["magicBook"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["gold"] - $thief_choices["gold"]) * ($choices_temp["gold"] - $thief_choices["gold"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["weapon"] - $thief_choices["weapon"]) * ($choices_temp["weapon"] - $thief_choices["weapon"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["sword"] - $thief_choices["sword"]) * ($choices_temp["sword"] - $thief_choices["sword"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["bow"] - $thief_choices["bow"]) * ($choices_temp["bow"] - $thief_choices["bow"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["hide"] - $thief_choices["hide"]) * ($choices_temp["hide"] - $thief_choices["hide"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["wait"] - $thief_choices["wait"]) * ($choices_temp["wait"] - $thief_choices["wait"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["sneak"] - $thief_choices["sneak"]) * ($choices_temp["sneak"] - $thief_choices["sneak"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["talk"] - $thief_choices["talk"]) * ($choices_temp["talk"] - $thief_choices["talk"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["bribe"] - $thief_choices["bribe"]) * ($choices_temp["bribe"] - $thief_choices["bribe"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["runAway"] - $thief_choices["runAway"]) * ($choices_temp["runAway"] - $thief_choices["runAway"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magic"] - $thief_choices["magic"]) * ($choices_temp["magic"] - $thief_choices["magic"]))>>
+
+<<set $distance_temp to Math.sqrt($distance_temp)>>
+
+<<if $distance_temp < $distance>>
+<<set $distance to $distance_temp>>
+<<set $model to "thief">>
+<<endif>>
+
+<<set $distance_temp to 0>>
+
+<<set $distance_temp to $distance_temp + (($choices_temp["near"] - $diplomat_choices["near"]) * ($choices_temp["near"] - $diplomat_choices["near"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["far"] - $diplomat_choices["far"]) * ($choices_temp["far"] - $diplomat_choices["far"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["many"] - $diplomat_choices["many"]) * ($choices_temp["many"] - $diplomat_choices["many"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["few"] - $diplomat_choices["few"]) * ($choices_temp["few"] - $diplomat_choices["few"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["loot"] - $diplomat_choices["loot"]) * ($choices_temp["loot"] - $diplomat_choices["loot"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["help"] - $diplomat_choices["help"]) * ($choices_temp["help"] - $diplomat_choices["help"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicSword"] - $diplomat_choices["magicSword"]) * ($choices_temp["magicSword"] - $diplomat_choices["magicSword"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicBow"] - $diplomat_choices["magicBow"]) * ($choices_temp["magicBow"] - $diplomat_choices["magicBow"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicBook"] - $diplomat_choices["magicBook"]) * ($choices_temp["magicBook"] - $diplomat_choices["magicBook"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["gold"] - $diplomat_choices["gold"]) * ($choices_temp["gold"] - $diplomat_choices["gold"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["weapon"] - $diplomat_choices["weapon"]) * ($choices_temp["weapon"] - $diplomat_choices["weapon"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["sword"] - $diplomat_choices["sword"]) * ($choices_temp["sword"] - $diplomat_choices["sword"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["bow"] - $diplomat_choices["bow"]) * ($choices_temp["bow"] - $diplomat_choices["bow"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["hide"] - $diplomat_choices["hide"]) * ($choices_temp["hide"] - $diplomat_choices["hide"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["wait"] - $diplomat_choices["wait"]) * ($choices_temp["wait"] - $diplomat_choices["wait"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["sneak"] - $diplomat_choices["sneak"]) * ($choices_temp["sneak"] - $diplomat_choices["sneak"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["talk"] - $diplomat_choices["talk"]) * ($choices_temp["talk"] - $diplomat_choices["talk"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["bribe"] - $diplomat_choices["bribe"]) * ($choices_temp["bribe"] - $diplomat_choices["bribe"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["runAway"] - $diplomat_choices["runAway"]) * ($choices_temp["runAway"] - $diplomat_choices["runAway"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magic"] - $diplomat_choices["magic"]) * ($choices_temp["magic"] - $diplomat_choices["magic"]))>>
+
+<<set $distance_temp to Math.sqrt($distance_temp)>>
+
+<<if $distance_temp < $distance>>
+<<set $distance to $distance_temp>>
+<<set $model to "diplomat">>
+<<endif>>
+
+<<set $distance_temp to 0>>
+
+<<set $distance_temp to $distance_temp + (($choices_temp["near"] - $mage_choices["near"]) * ($choices_temp["near"] - $mage_choices["near"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["far"] - $mage_choices["far"]) * ($choices_temp["far"] - $mage_choices["far"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["many"] - $mage_choices["many"]) * ($choices_temp["many"] - $mage_choices["many"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["few"] - $mage_choices["few"]) * ($choices_temp["few"] - $mage_choices["few"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["loot"] - $mage_choices["loot"]) * ($choices_temp["loot"] - $mage_choices["loot"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["help"] - $mage_choices["help"]) * ($choices_temp["help"] - $mage_choices["help"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicSword"] - $mage_choices["magicSword"]) * ($choices_temp["magicSword"] - $mage_choices["magicSword"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicBow"] - $mage_choices["magicBow"]) * ($choices_temp["magicBow"] - $mage_choices["magicBow"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicBook"] - $mage_choices["magicBook"]) * ($choices_temp["magicBook"] - $mage_choices["magicBook"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["gold"] - $mage_choices["gold"]) * ($choices_temp["gold"] - $mage_choices["gold"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["weapon"] - $mage_choices["weapon"]) * ($choices_temp["weapon"] - $mage_choices["weapon"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["sword"] - $mage_choices["sword"]) * ($choices_temp["sword"] - $mage_choices["sword"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["bow"] - $mage_choices["bow"]) * ($choices_temp["bow"] - $mage_choices["bow"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["hide"] - $mage_choices["hide"]) * ($choices_temp["hide"] - $mage_choices["hide"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["wait"] - $mage_choices["wait"]) * ($choices_temp["wait"] - $mage_choices["wait"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["sneak"] - $mage_choices["sneak"]) * ($choices_temp["sneak"] - $mage_choices["sneak"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["talk"] - $mage_choices["talk"]) * ($choices_temp["talk"] - $mage_choices["talk"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["bribe"] - $mage_choices["bribe"]) * ($choices_temp["bribe"] - $mage_choices["bribe"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["runAway"] - $mage_choices["runAway"]) * ($choices_temp["runAway"] - $mage_choices["runAway"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magic"] - $mage_choices["magic"]) * ($choices_temp["magic"] - $mage_choices["magic"]))>>
+
+<<set $distance_temp to Math.sqrt($distance_temp)>>
+
+<<if $distance_temp < $distance>>
+<<set $distance to $distance_temp>>
+<<set $model to "mage">>
+<<endif>>
+
+<<set $distance_temp to 0>>
+
+<<set $distance_temp to $distance_temp + (($choices_temp["near"] - $fighter_choices["near"]) * ($choices_temp["near"] - $fighter_choices["near"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["far"] - $fighter_choices["far"]) * ($choices_temp["far"] - $fighter_choices["far"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["many"] - $fighter_choices["many"]) * ($choices_temp["many"] - $fighter_choices["many"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["few"] - $fighter_choices["few"]) * ($choices_temp["few"] - $fighter_choices["few"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["loot"] - $fighter_choices["loot"]) * ($choices_temp["loot"] - $fighter_choices["loot"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["help"] - $fighter_choices["help"]) * ($choices_temp["help"] - $fighter_choices["help"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicSword"] - $fighter_choices["magicSword"]) * ($choices_temp["magicSword"] - $fighter_choices["magicSword"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicBow"] - $fighter_choices["magicBow"]) * ($choices_temp["magicBow"] - $fighter_choices["magicBow"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magicBook"] - $fighter_choices["magicBook"]) * ($choices_temp["magicBook"] - $fighter_choices["magicBook"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["gold"] - $fighter_choices["gold"]) * ($choices_temp["gold"] - $fighter_choices["gold"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["weapon"] - $fighter_choices["weapon"]) * ($choices_temp["weapon"] - $fighter_choices["weapon"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["sword"] - $fighter_choices["sword"]) * ($choices_temp["sword"] - $fighter_choices["sword"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["bow"] - $fighter_choices["bow"]) * ($choices_temp["bow"] - $fighter_choices["bow"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["hide"] - $fighter_choices["hide"]) * ($choices_temp["hide"] - $fighter_choices["hide"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["wait"] - $fighter_choices["wait"]) * ($choices_temp["wait"] - $fighter_choices["wait"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["sneak"] - $fighter_choices["sneak"]) * ($choices_temp["sneak"] - $fighter_choices["sneak"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["talk"] - $fighter_choices["talk"]) * ($choices_temp["talk"] - $fighter_choices["talk"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["bribe"] - $fighter_choices["bribe"]) * ($choices_temp["bribe"] - $fighter_choices["bribe"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["runAway"] - $fighter_choices["runAway"]) * ($choices_temp["runAway"] - $fighter_choices["runAway"]))>>
+<<set $distance_temp to $distance_temp + (($choices_temp["magic"] - $fighter_choices["magic"]) * ($choices_temp["magic"] - $fighter_choices["magic"]))>>
+
+<<set $distance_temp to Math.sqrt($distance_temp)>>
+
+<<if $distance_temp < $distance>>
+<<set $distance to $distance_temp>>
+<<set $model to "fighter">>
+<<endif>>
+
+<<if $model is "archer">>
+<<set $player_model["enemy_near_few"] to $archer_model["enemy_near_few"]>>
+<<set $player_model["enemy_near_many"] to $archer_model["enemy_near_many"]>>
+<<set $player_model["enemy_far_few"] to $archer_model["enemy_far_few"]>>
+<<set $player_model["enemy_far_many"] to $archer_model["enemy_far_many"]>>
+<<set $player_model["town_shop"] to $archer_model["town_shop"]>>
+<<set $player_model["help"] to $archer_model["help"]>>
+<<set $player_model["loot"] to $archer_model["loot"]>>
+<<set $player_model["puzzle"] to $archer_model["puzzle"]>>
+<<set $player_model["magicSword"] to $archer_model["magicSword"]>>
+<<set $player_model["magicBow"] to $archer_model["magicBow"]>>
+<<set $player_model["magicBook"] to $archer_model["magicBook"]>>
+<<set $player_model["talk"] to $archer_model["talk"]>>
+<<set $player_model["bribe"] to $archer_model["bribe"]>>
+<<set $player_model["sneak"] to $archer_model["sneak"]>>
+<<set $player_model["wait"] to $archer_model["wait"]>>
+<<elseif $model is "thief">>
+<<set $player_model["enemy_near_few"] to $thief_model["enemy_near_few"]>>
+<<set $player_model["enemy_near_many"] to $thief_model["enemy_near_many"]>>
+<<set $player_model["enemy_far_few"] to $thief_model["enemy_far_few"]>>
+<<set $player_model["enemy_far_many"] to $thief_model["enemy_far_many"]>>
+<<set $player_model["town_shop"] to $thief_model["town_shop"]>>
+<<set $player_model["help"] to $thief_model["help"]>>
+<<set $player_model["loot"] to $thief_model["loot"]>>
+<<set $player_model["puzzle"] to $thief_model["puzzle"]>>
+<<set $player_model["magicSword"] to $thief_model["magicSword"]>>
+<<set $player_model["magicBow"] to $thief_model["magicBow"]>>
+<<set $player_model["magicBook"] to $thief_model["magicBook"]>>
+<<set $player_model["talk"] to $thief_model["talk"]>>
+<<set $player_model["bribe"] to $thief_model["bribe"]>>
+<<set $player_model["sneak"] to $thief_model["sneak"]>>
+<<set $player_model["wait"] to $thief_model["wait"]>>
+<<elseif $model is "diplomat">>
+<<set $player_model["enemy_near_few"] to $diplomat_model["enemy_near_few"]>>
+<<set $player_model["enemy_near_many"] to $diplomat_model["enemy_near_many"]>>
+<<set $player_model["enemy_far_few"] to $diplomat_model["enemy_far_few"]>>
+<<set $player_model["enemy_far_many"] to $diplomat_model["enemy_far_many"]>>
+<<set $player_model["town_shop"] to $diplomat_model["town_shop"]>>
+<<set $player_model["help"] to $diplomat_model["help"]>>
+<<set $player_model["loot"] to $diplomat_model["loot"]>>
+<<set $player_model["puzzle"] to $diplomat_model["puzzle"]>>
+<<set $player_model["magicSword"] to $diplomat_model["magicSword"]>>
+<<set $player_model["magicBow"] to $diplomat_model["magicBow"]>>
+<<set $player_model["magicBook"] to $diplomat_model["magicBook"]>>
+<<set $player_model["talk"] to $diplomat_model["talk"]>>
+<<set $player_model["bribe"] to $diplomat_model["bribe"]>>
+<<set $player_model["sneak"] to $diplomat_model["sneak"]>>
+<<set $player_model["wait"] to $diplomat_model["wait"]>>
+<<elseif $model is "mage">>
+<<set $player_model["enemy_near_few"] to $mage_model["enemy_near_few"]>>
+<<set $player_model["enemy_near_many"] to $mage_model["enemy_near_many"]>>
+<<set $player_model["enemy_far_few"] to $mage_model["enemy_far_few"]>>
+<<set $player_model["enemy_far_many"] to $mage_model["enemy_far_many"]>>
+<<set $player_model["town_shop"] to $mage_model["town_shop"]>>
+<<set $player_model["help"] to $mage_model["help"]>>
+<<set $player_model["loot"] to $mage_model["loot"]>>
+<<set $player_model["puzzle"] to $mage_model["puzzle"]>>
+<<set $player_model["magicSword"] to $mage_model["magicSword"]>>
+<<set $player_model["magicBow"] to $mage_model["magicBow"]>>
+<<set $player_model["magicBook"] to $mage_model["magicBook"]>>
+<<set $player_model["talk"] to $mage_model["talk"]>>
+<<set $player_model["bribe"] to $mage_model["bribe"]>>
+<<set $player_model["sneak"] to $mage_model["sneak"]>>
+<<set $player_model["wait"] to $mage_model["wait"]>>
+<<elseif $model is "fighter">>
+<<set $player_model["enemy_near_few"] to $fighter_model["enemy_near_few"]>>
+<<set $player_model["enemy_near_many"] to $fighter_model["enemy_near_many"]>>
+<<set $player_model["enemy_far_few"] to $fighter_model["enemy_far_few"]>>
+<<set $player_model["enemy_far_many"] to $fighter_model["enemy_far_many"]>>
+<<set $player_model["town_shop"] to $fighter_model["town_shop"]>>
+<<set $player_model["help"] to $fighter_model["help"]>>
+<<set $player_model["loot"] to $fighter_model["loot"]>>
+<<set $player_model["puzzle"] to $fighter_model["puzzle"]>>
+<<set $player_model["magicSword"] to $fighter_model["magicSword"]>>
+<<set $player_model["magicBow"] to $fighter_model["magicBow"]>>
+<<set $player_model["magicBook"] to $fighter_model["magicBook"]>>
+<<set $player_model["talk"] to $fighter_model["talk"]>>
+<<set $player_model["bribe"] to $fighter_model["bribe"]>>
+<<set $player_model["sneak"] to $fighter_model["sneak"]>>
+<<set $player_model["wait"] to $fighter_model["wait"]>>
+<<else>>
+<<set $player_model["enemy_near_few"] to $adventurer_model["enemy_near_few"]>>
+<<set $player_model["enemy_near_many"] to $adventurer_model["enemy_near_many"]>>
+<<set $player_model["enemy_far_few"] to $adventurer_model["enemy_far_few"]>>
+<<set $player_model["enemy_far_many"] to $adventurer_model["enemy_far_many"]>>
+<<set $player_model["town_shop"] to $adventurer_model["town_shop"]>>
+<<set $player_model["help"] to $adventurer_model["help"]>>
+<<set $player_model["loot"] to $adventurer_model["loot"]>>
+<<set $player_model["puzzle"] to $adventurer_model["puzzle"]>>
+<<set $player_model["magicSword"] to $adventurer_model["magicSword"]>>
+<<set $player_model["magicBow"] to $adventurer_model["magicBow"]>>
+<<set $player_model["magicBook"] to $adventurer_model["magicBook"]>>
+<<set $player_model["talk"] to $adventurer_model["talk"]>>
+<<set $player_model["bribe"] to $adventurer_model["bribe"]>>
+<<set $player_model["sneak"] to $adventurer_model["sneak"]>>
+<<set $player_model["wait"] to $adventurer_model["wait"]>>
+<<endif>>
+
+<<endsilently>>
+<<endif>>
+
+<<silently>>
+<<if $player_health <5>>
+<<set $player_health to 5>>
+<<endif>>
+<<set $total to 0>>
+
+<<if $encounter["type"] is "enemy_near_few">>
+<<set $enemy_near_few_stop to $player_model["enemy_near_few"]/2>>
+<<else>>
+<<set $enemy_near_few_stop to $player_model["enemy_near_few"]>>
+<<endif>>
+<<set $total to $enemy_near_few_stop>>
+
+<<if $encounter["type"] is "enemy_near_many">>
+<<set $enemy_near_many_stop to $total + $player_model["enemy_near_many"]/2>>
+<<else>>
+<<set $enemy_near_many_stop to $total + $player_model["enemy_near_many"]>>
+<<endif>>
+<<set $total to $enemy_near_many_stop>>
+
+<<if $encounter["type"] is "enemy_far_few">>
+<<set $enemy_far_few_stop to $total + $player_model["enemy_far_few"]/2>>
+<<else>>
+<<set $enemy_far_few_stop to $total + $player_model["enemy_far_few"]>>
+<<endif>>
+<<set $total to $enemy_far_few_stop>>
+
+<<if $encounter["type"] is "enemy_far_many">>
+<<set $enemy_far_many_stop to $total + $player_model["enemy_far_many"]/2>>
+<<else>>
+<<set $enemy_far_many_stop to $total + $player_model["enemy_far_many"]>>
+<<endif>>
+<<set $total to $enemy_far_many_stop>>
+
+<<if $encounter["type"] is "town_shop">>
+<<set $town_shop_stop to $total + $player_model["town_shop"]/2>>
+<<else>>
+<<set $town_shop_stop to $total + $player_model["town_shop"]>>
+<<endif>>
+<<set $total to $town_shop_stop>>
+
+<<if $encounter["type"] is "help">>
+<<set $help_stop to $total + $player_model["help"]/2>>
+<<else>>
+<<set $help_stop to $total + $player_model["help"]>>
+<<endif>>
+<<set $total to $help_stop>>
+
+<<if $encounter["type"] is "loot">>
+<<set $loot_stop to $total + $player_model["loot"]/2>>
+<<else>>
+<<set $loot_stop to $total + $player_model["loot"]>>
+<<endif>>
+<<set $total to $loot_stop>>
+
+<<if $encounter["type"] is "puzzle">>
+<<set $puzzle_stop to $total + $player_model["puzzle"]/2>>
+<<else>>
+<<set $puzzle_stop to $total + $player_model["puzzle"]>>
+<<endif>>
+<<set $total to $puzzle_stop>>
+
+<<set $roll to Math.random()*$total>>
+
+<<if $roll < $enemy_near_few_stop>>
+<<set $encounter1["type"] to "enemy_near_few">>
+<<elseif $roll < $enemy_near_many_stop>>
+<<set $encounter1["type"] to "enemy_near_many">>
+<<elseif $roll < $enemy_far_few_stop>>
+<<set $encounter1["type"] to "enemy_far_few">>
+<<elseif $roll < $enemy_far_many_stop>>
+<<set $encounter1["type"] to "enemy_far_many">>
+<<elseif $roll < $town_shop_stop>>
+<<set $encounter1["type"] to "town_shop">>
+<<elseif $roll < $help_stop>>
+<<set $encounter1["type"] to "help">>
+<<elseif $roll < $loot_stop>>
+<<set $encounter1["type"] to "loot">>
+<<else>>
+<<set $encounter1["type"] to "puzzle">>
+<<endif>>
+
+<<set $total to 0>>
+
+<<if $encounter1["type"] is "enemy_near_few">>
+<<set $enemy_near_few_stop to 0>>
+<<else>>
+<<if $encounter["type"] is "enemy_near_few">>
+<<set $enemy_near_few_stop to $player_model["enemy_near_few"]/2>>
+<<else>>
+<<set $enemy_near_few_stop to $player_model["enemy_near_few"]>>
+<<endif>>
+<<set $total to $enemy_near_few_stop>>
+<<endif>>
+
+<<if $encounter1["type"] is "enemy_near_many">>
+<<set $enemy_near_many_stop to 0>>
+<<else>>
+<<if $encounter["type"] is "enemy_near_many">>
+<<set $enemy_near_many_stop to $total + $player_model["enemy_near_many"]/2>>
+<<else>>
+<<set $enemy_near_many_stop to $total + $player_model["enemy_near_many"]>>
+<<endif>>
+<<set $total to $enemy_near_many_stop>>
+<<endif>>
+
+<<if $encounter1["type"] is "enemy_far_few">>
+<<set $enemy_far_few_stop to 0>>
+<<else>>
+<<if $encounter["type"] is "enemy_far_few">>
+<<set $enemy_far_few_stop to $total + $player_model["enemy_far_few"]/2>>
+<<else>>
+<<set $enemy_far_few_stop to $total + $player_model["enemy_far_few"]>>
+<<endif>>
+<<set $total to $enemy_far_few_stop>>
+<<endif>>
+
+<<if $encounter1["type"] is "enemy_far_many">>
+<<set $enemy_far_many_stop to 0>>
+<<else>>
+<<if $encounter["type"] is "enemy_far_many">>
+<<set $enemy_far_many_stop to $total + $player_model["enemy_far_many"]/2>>
+<<else>>
+<<set $enemy_far_many_stop to $total + $player_model["enemy_far_many"]>>
+<<endif>>
+<<set $total to $enemy_far_many_stop>>
+<<endif>>
+
+<<if $encounter1["type"] is "town_shop">>
+<<set $town_shop_stop to 0>>
+<<else>>
+<<if $encounter["type"] is "town_shop">>
+<<set $town_shop_stop to $total + $player_model["town_shop"]/2>>
+<<else>>
+<<set $town_shop_stop to $total + $player_model["town_shop"]>>
+<<endif>>
+<<set $total to $town_shop_stop>>
+<<endif>>
+
+<<if $encounter1["type"] is "help">>
+<<set $help_stop to 0>>
+<<else>>
+<<if $encounter["type"] is "help">>
+<<set $help_stop to $total + $player_model["help"]/2>>
+<<else>>
+<<set $help_stop to $total + $player_model["help"]>>
+<<endif>>
+<<set $total to $help_stop>>
+<<endif>>
+
+<<if $encounter1["type"] is "loot">>
+<<set $loot_stop to 0>>
+<<else>>
+<<if $encounter["type"] is "loot">>
+<<set $loot_stop to $total + $player_model["loot"]/2>>
+<<else>>
+<<set $loot_stop to $total + $player_model["loot"]>>
+<<endif>>
+<<set $total to $loot_stop>>
+<<endif>>
+
+<<if $encounter1["type"] is "puzzle">>
+<<set $puzzle_stop to 0>>
+<<else>>
+<<if $encounter["type"] is "puzzle">>
+<<set $puzzle_stop to $total + $player_model["puzzle"]/2>>
+<<else>>
+<<set $puzzle_stop to $total + $player_model["puzzle"]>>
+<<endif>>
+<<set $total to $puzzle_stop>>
+<<endif>>
+
+<<set $roll to Math.random()*$total>>
+
+<<if $roll < $enemy_near_few_stop>>
+<<set $encounter2["type"] to "enemy_near_few">>
+<<elseif $roll < $enemy_near_many_stop>>
+<<set $encounter2["type"] to "enemy_near_many">>
+<<elseif $roll < $enemy_far_few_stop>>
+<<set $encounter2["type"] to "enemy_far_few">>
+<<elseif $roll < $enemy_far_many_stop>>
+<<set $encounter2["type"] to "enemy_far_many">>
+<<elseif $roll < $town_shop_stop>>
+<<set $encounter2["type"] to "town_shop">>
+<<elseif $roll < $help_stop>>
+<<set $encounter2["type"] to "help">>
+<<elseif $roll < $loot_stop>>
+<<set $encounter2["type"] to "loot">>
+<<else>>
+<<set $encounter2["type"] to "puzzle">>
+<<endif>>
+
+<<set $total to 0>>
+<<set $encounter1["talk"] to false>>
+<<set $encounter1["bribe"] to false>>
+<<set $encounter1["sneak"] to false>>
+<<set $encounter1["wait"] to false>>
+<<set $encounter2["talk"] to false>>
+<<set $encounter2["bribe"] to false>>
+<<set $encounter2["sneak"] to false>>
+<<set $encounter2["wait"] to false>>
+
+<<if $encounter["talk"]>>
+<<set $talk_stop to $total + $player_model["talk"]/2>>
+<<else>>
+<<set $talk_stop to $total + $player_model["talk"]>>
+<<endif>>
+<<set $total to $talk_stop>>
+
+<<if $encounter["bribe"]>>
+<<set $bribe_stop to $total + $player_model["bribe"]/2>>
+<<else>>
+<<set $bribe_stop to $total + $player_model["bribe"]>>
+<<endif>>
+<<set $total to $bribe_stop>>
+
+<<if $encounter["sneak"]>>
+<<set $sneak_stop to $total + $player_model["sneak"]/2>>
+<<else>>
+<<set $sneak_stop to $total + $player_model["sneak"]>>
+<<endif>>
+<<set $total to $sneak_stop>>
+
+<<if $encounter["wait"]>>
+<<set $wait_stop to $total + $player_model["wait"]/2>>
+<<else>>
+<<set $wait_stop to $total + $player_model["wait"]>>
+<<endif>>
+<<set $total to $wait_stop>>
+
+<<set $roll to Math.random()*$total>>
+
+<<if $roll < $talk_stop>>
+<<set $encounter1["talk"] to true>>
+<<elseif $roll < $bribe_stop>>
+<<set $encounter1["bribe"] to true>>
+<<elseif $roll < $sneak_stop>>
+<<set $encounter1["sneak"] to true>>
+<<elseif $roll < $wait_stop>>
+<<set $encounter1["wait"] to true>>
+<<endif>>
+
+<<set $total to 0>>
+
+<<if $encounter1["talk"]>>
+<<set $talk_stop to 0>>
+<<else>>
+<<if $encounter["talk"]>>
+<<set $talk_stop to $total + $player_model["talk"]/2>>
+<<else>>
+<<set $talk_stop to $total + $player_model["talk"]>>
+<<endif>>
+<<set $total to $talk_stop>>
+<<endif>>
+
+<<if $encounter1["bribe"]>>
+<<set $bribe_stop to 0>>
+<<else>>
+<<if $encounter["bribe"]>>
+<<set $bribe_stop to $total + $player_model["bribe"]/2>>
+<<else>>
+<<set $bribe_stop to $total + $player_model["bribe"]>>
+<<endif>>
+<<set $total to $bribe_stop>>
+<<endif>>
+
+<<if $encounter1["sneak"]>>
+<<set $sneak_stop to 0>>
+<<else>>
+<<if $encounter["sneak"]>>
+<<set $sneak_stop to $total + $player_model["sneak"]/2>>
+<<else>>
+<<set $sneak_stop to $total + $player_model["sneak"]>>
+<<endif>>
+<<set $total to $sneak_stop>>
+<<endif>>
+
+<<if $encounter1["wait"]>>
+<<set $wait_stop to 0>>
+<<else>>
+<<if $encounter["wait"]>>
+<<set $wait_stop to $total + $player_model["wait"]/2>>
+<<else>>
+<<set $wait_stop to $total + $player_model["wait"]>>
+<<endif>>
+<<set $total to $wait_stop>>
+<<endif>>
+
+<<set $roll to Math.random()*$total>>
+
+<<if $roll < $talk_stop>>
+<<set $encounter1["talk"] to true>>
+<<elseif $roll < $bribe_stop>>
+<<set $encounter1["bribe"] to true>>
+<<elseif $roll < $sneak_stop>>
+<<set $encounter1["sneak"] to true>>
+<<elseif $roll < $wait_stop>>
+<<set $encounter1["wait"] to true>>
+<<endif>>
+
+<<if $encounter1["type"] is "town_shop">>
+<<set $total to 0>>
+
+<<if $encounter1["talk"]>>
+<<set $talk_stop to 0>>
+<<else>>
+<<if $encounter["talk"]>>
+<<set $talk_stop to $total + $player_model["talk"]/2>>
+<<else>>
+<<set $talk_stop to $total + $player_model["talk"]>>
+<<endif>>
+<<set $total to $talk_stop>>
+<<endif>>
+
+<<if $encounter1["bribe"]>>
+<<set $bribe_stop to 0>>
+<<else>>
+<<if $encounter["bribe"]>>
+<<set $bribe_stop to $total + $player_model["bribe"]/2>>
+<<else>>
+<<set $bribe_stop to $total + $player_model["bribe"]>>
+<<endif>>
+<<set $total to $bribe_stop>>
+<<endif>>
+
+<<if $encounter1["sneak"]>>
+<<set $sneak_stop to 0>>
+<<else>>
+<<if $encounter["sneak"]>>
+<<set $sneak_stop to $total + $player_model["sneak"]/2>>
+<<else>>
+<<set $sneak_stop to $total + $player_model["sneak"]>>
+<<endif>>
+<<set $total to $sneak_stop>>
+<<endif>>
+
+<<if $encounter1["wait"]>>
+<<set $wait_stop to 0>>
+<<else>>
+<<if $encounter["wait"]>>
+<<set $wait_stop to $total + $player_model["wait"]/2>>
+<<else>>
+<<set $wait_stop to $total + $player_model["wait"]>>
+<<endif>>
+<<set $total to $wait_stop>>
+<<endif>>
+
+<<set $roll to Math.random()*$total>>
+
+<<if $roll < $talk_stop>>
+<<set $encounter1["talk"] to true>>
+<<elseif $roll < $bribe_stop>>
+<<set $encounter1["bribe"] to true>>
+<<elseif $roll < $sneak_stop>>
+<<set $encounter1["sneak"] to true>>
+<<elseif $roll < $wait_stop>>
+<<set $encounter1["wait"] to true>>
+<<endif>>
+<<endif>>
+
+<<set $total to 0>>
+
+<<if $encounter["talk"]>>
+<<set $talk_stop to $total + $player_model["talk"]/2>>
+<<else>>
+<<set $talk_stop to $total + $player_model["talk"]>>
+<<endif>>
+<<set $total to $talk_stop>>
+
+<<if $encounter["bribe"]>>
+<<set $bribe_stop to $total + $player_model["bribe"]/2>>
+<<else>>
+<<set $bribe_stop to $total + $player_model["bribe"]>>
+<<endif>>
+<<set $total to $bribe_stop>>
+
+<<if $encounter["sneak"]>>
+<<set $sneak_stop to $total + $player_model["sneak"]/2>>
+<<else>>
+<<set $sneak_stop to $total + $player_model["sneak"]>>
+<<endif>>
+<<set $total to $sneak_stop>>
+
+<<if $encounter["wait"]>>
+<<set $wait_stop to $total + $player_model["wait"]/2>>
+<<else>>
+<<set $wait_stop to $total + $player_model["wait"]>>
+<<endif>>
+<<set $total to $wait_stop>>
+
+<<set $roll to Math.random()*$total>>
+
+<<if $roll < $talk_stop>>
+<<set $encounter2["talk"] to true>>
+<<elseif $roll < $bribe_stop>>
+<<set $encounter2["bribe"] to true>>
+<<elseif $roll < $sneak_stop>>
+<<set $encounter2["sneak"] to true>>
+<<elseif $roll < $wait_stop>>
+<<set $encounter2["wait"] to true>>
+<<endif>>
+
+<<set $total to 0>>
+
+<<if $encounter2["talk"]>>
+<<set $talk_stop to 0>>
+<<else>>
+<<if $encounter["talk"]>>
+<<set $talk_stop to $total + $player_model["talk"]/2>>
+<<else>>
+<<set $talk_stop to $total + $player_model["talk"]>>
+<<endif>>
+<<set $total to $talk_stop>>
+<<endif>>
+
+<<if $encounter2["bribe"]>>
+<<set $bribe_stop to 0>>
+<<else>>
+<<if $encounter["bribe"]>>
+<<set $bribe_stop to $total + $player_model["bribe"]/2>>
+<<else>>
+<<set $bribe_stop to $total + $player_model["bribe"]>>
+<<endif>>
+<<set $total to $bribe_stop>>
+<<endif>>
+
+<<if $encounter2["sneak"]>>
+<<set $sneak_stop to 0>>
+<<else>>
+<<if $encounter["sneak"]>>
+<<set $sneak_stop to $total + $player_model["sneak"]/2>>
+<<else>>
+<<set $sneak_stop to $total + $player_model["sneak"]>>
+<<endif>>
+<<set $total to $sneak_stop>>
+<<endif>>
+
+<<if $encounter2["wait"]>>
+<<set $wait_stop to 0>>
+<<else>>
+<<if $encounter["wait"]>>
+<<set $wait_stop to $total + $player_model["wait"]/2>>
+<<else>>
+<<set $wait_stop to $total + $player_model["wait"]>>
+<<endif>>
+<<set $total to $wait_stop>>
+<<endif>>
+
+<<set $roll to Math.random()*$total>>
+
+<<if $roll < $talk_stop>>
+<<set $encounter2["talk"] to true>>
+<<elseif $roll < $bribe_stop>>
+<<set $encounter2["bribe"] to true>>
+<<elseif $roll < $sneak_stop>>
+<<set $encounter2["sneak"] to true>>
+<<elseif $roll < $wait_stop>>
+<<set $encounter2["wait"] to true>>
+<<endif>>
+
+<<if $encounter2["type"] is "town_shop">>
+<<set $total to 0>>
+
+<<if $encounter2["talk"]>>
+<<set $talk_stop to 0>>
+<<else>>
+<<if $encounter["talk"]>>
+<<set $talk_stop to $total + $player_model["talk"]/2>>
+<<else>>
+<<set $talk_stop to $total + $player_model["talk"]>>
+<<endif>>
+<<set $total to $talk_stop>>
+<<endif>>
+
+<<if $encounter2["bribe"]>>
+<<set $bribe_stop to 0>>
+<<else>>
+<<if $encounter["bribe"]>>
+<<set $bribe_stop to $total + $player_model["bribe"]/2>>
+<<else>>
+<<set $bribe_stop to $total + $player_model["bribe"]>>
+<<endif>>
+<<set $total to $bribe_stop>>
+<<endif>>
+
+<<if $encounter2["sneak"]>>
+<<set $sneak_stop to 0>>
+<<else>>
+<<if $encounter["sneak"]>>
+<<set $sneak_stop to $total + $player_model["sneak"]/2>>
+<<else>>
+<<set $sneak_stop to $total + $player_model["sneak"]>>
+<<endif>>
+<<set $total to $sneak_stop>>
+<<endif>>
+
+<<if $encounter2["wait"]>>
+<<set $wait_stop to 0>>
+<<else>>
+<<if $encounter["wait"]>>
+<<set $wait_stop to $total + $player_model["wait"]/2>>
+<<else>>
+<<set $wait_stop to $total + $player_model["wait"]>>
+<<endif>>
+<<set $total to $wait_stop>>
+<<endif>>
+
+<<set $roll to Math.random()*$total>>
+
+<<if $roll < $talk_stop>>
+<<set $encounter2["talk"] to true>>
+<<elseif $roll < $bribe_stop>>
+<<set $encounter2["bribe"] to true>>
+<<elseif $roll < $sneak_stop>>
+<<set $encounter2["sneak"] to true>>
+<<elseif $roll < $wait_stop>>
+<<set $encounter2["wait"] to true>>
+<<endif>>
+<<endif>>
+
+<<set $encounter1["gold_amount"] to random(1,5)>>
+<<set $encounter1["enemy_health"] to random(5,15)>>
+<<set $encounter1["enemy_damage"] to random(3,8)>>
+<<if $inventory["armor"] >= 1>>
+<<set $encounter1["enemy_damage"] to $encounter1["enemy_damage"] - 2>>
+<<endif>>
+<<set $encounter1["sword_damage"] to random(1,10)>>
+<<set $encounter1["bow_damage"] to random(1,10)>>
+<<set $encounter1["magic_damage"] to random(1,10)>>
+<<set $encounter1["magic_sword_damage"] to 2*$encounter1["sword_damage"]>>
+<<set $encounter1["magic_bow_damage"] to 2*$encounter1["bow_damage"]>>
+<<set $encounter1["magic_book_damage"] to 2*$encounter1["magic_damage"]>>
+
+<<if $encounter1["type"] is "puzzle">>
+<<set $enemy_health to 1>>
+<<set $encounter1["sword_damage"] to 0>>
+<<set $encounter1["bow_damage"] to 0>>
+<<set $encounter1["magic_damage"] to 0>>
+<<set $encounter1["magic_sword_damage"] to 0>>
+<<set $encounter1["magic_bow_damage"] to 0>>
+<<set $encounter1["magic_book_damage"] to 0>>
+<<set $roll to random(3)>>
+<<if $roll < 1>>
+<<set $encounter1["magic_sword_damage"] to 1>>
+<<elseif $roll < 2>>
+<<set $encounter1["magic_bow_damage"] to 1>>
+<<else>>
+<<set $encounter1["magic_book_damage"] to 1>>
+<<endif>>
+<<endif>>
+
+<<set $encounter2["gold_amount"] to random(1,5)>>
+<<set $encounter2["enemy_health"] to random(5,15)>>
+<<set $encounter2["enemy_damage"] to random(3,8)>>
+<<if $inventory["armor"] >= 1>>
+<<set $encounter2["enemy_damage"] to $encounter2["enemy_damage"] - 2>>
+<<endif>>
+<<set $encounter2["sword_damage"] to random(1,10)>>
+<<set $encounter2["bow_damage"] to random(1,10)>>
+<<set $encounter2["magic_damage"] to random(1,10)>>
+<<set $encounter2["magic_sword_damage"] to 2*$encounter2["sword_damage"]>>
+<<set $encounter2["magic_bow_damage"] to 2*$encounter2["bow_damage"]>>
+<<set $encounter2["magic_book_damage"] to 2*$encounter2["magic_damage"]>>
+
+<<if $encounter2["type"] is "puzzle">>
+<<set $enemy_health to 1>>
+<<set $encounter2["sword_damage"] to 0>>
+<<set $encounter2["bow_damage"] to 0>>
+<<set $encounter2["magic_damage"] to 0>>
+<<set $encounter2["magic_sword_damage"] to 0>>
+<<set $encounter2["magic_bow_damage"] to 0>>
+<<set $encounter2["magic_book_damage"] to 0>>
+<<set $roll to random(3)>>
+<<if $roll < 1>>
+<<set $encounter2["magic_sword_damage"] to 1>>
+<<elseif $roll < 2>>
+<<set $encounter2["magic_bow_damage"] to 1>>
+<<else>>
+<<set $encounter2["magic_book_damage"] to 1>>
+<<endif>>
+<<endif>>
+
+<<set $total to 0>>
+
+<<if $encounter["loot_1"] is "Magic Sword">>
+<<set $sword_stop to $total + $player_model["magicSword"]/2>>
+<<else>>
+<<set $sword_stop to $total + $player_model["magicSword"]>>
+<<endif>>
+<<set $total to $sword_stop>>
+
+<<if $encounter["loot_1"] is "Magic Bow">>
+<<set $bow_stop to $total + $player_model["magicBow"]/2>>
+<<else>>
+<<set $bow_stop to $total + $player_model["magicBow"]>>
+<<endif>>
+<<set $total to $bow_stop>>
+
+<<if $encounter["loot_1"] is "Magic Book">>
+<<set $book_stop to $total + $player_model["magicBook"]/2>>
+<<else>>
+<<set $book_stop to $total + $player_model["magicBook"]>>
+<<endif>>
+<<set $total to $book_stop>>
+
+<<set $roll to Math.random()*$total>>
+<<if $roll < $sword_stop>>
+<<set $encounter1["loot_1"] to "Magic Sword">>
+<<elseif $roll < $bow_stop>>
+<<set $encounter1["loot_1"] to "Magic Bow">>
+<<else>>
+<<set $encounter1["loot_1"] to "Magic Book">>
+<<endif>>
+
+<<set $total to 0>>
+
+<<if $encounter["loot_1"] is "Magic Sword">>
+<<set $sword_stop to $total + $player_model["magicSword"]/2>>
+<<else>>
+<<set $sword_stop to $total + $player_model["magicSword"]>>
+<<endif>>
+<<set $total to $sword_stop>>
+
+<<if $encounter["loot_1"] is "Magic Bow">>
+<<set $bow_stop to $total + $player_model["magicBow"]/2>>
+<<else>>
+<<set $bow_stop to $total + $player_model["magicBow"]>>
+<<endif>>
+<<set $total to $bow_stop>>
+
+<<if $encounter["loot_1"] is "Magic Book">>
+<<set $book_stop to $total + $player_model["magicBook"]/2>>
+<<else>>
+<<set $book_stop to $total + $player_model["magicBook"]>>
+<<endif>>
+<<set $total to $book_stop>>
+
+<<set $roll to Math.random()*$total>>
+<<if $roll < $sword_stop>>
+<<set $encounter2["loot_1"] to "Magic Sword">>
+<<elseif $roll < $bow_stop>>
+<<set $encounter2["loot_1"] to "Magic Bow">>
+<<else>>
+<<set $encounter2["loot_1"] to "Magic Book">>
+<<endif>>
+
+<<if $encounter1["type"] is "enemy_near_few">>
+<<set $enemy_list to $near_few_list.random()>>
+<<set $encounter1["enemy"] to $enemy_list[0]>>
+<<set $encounter1["enemy_article"] to $enemy_list[1]>>
+<<set $encounter1["enemy_description"] to $enemy_list[2]>>
+<<elseif $encounter1["type"] is "enemy_near_many">>
+<<set $enemy_list to $near_many_list.random()>>
+<<set $encounter1["enemy"] to $enemy_list[0]>>
+<<set $encounter1["enemy_article"] to $enemy_list[1]>>
+<<set $encounter1["enemy_description"] to $enemy_list[2]>>
+<<elseif $encounter1["type"] is "enemy_far_few">>
+<<set $enemy_list to $far_few_list.random()>>
+<<set $encounter1["enemy"] to $enemy_list[0]>>
+<<set $encounter1["enemy_article"] to $enemy_list[1]>>
+<<set $encounter1["enemy_description"] to $enemy_list[2]>>
+<<elseif $encounter1["type"] is "enemy_far_many">>
+<<set $enemy_list to $far_many_list.random()>>
+<<set $encounter1["enemy"] to $enemy_list[0]>>
+<<set $encounter1["enemy_article"] to $enemy_list[1]>>
+<<set $encounter1["enemy_description"] to $enemy_list[2]>>
+<<endif>>
+
+<<if $encounter2["type"] is "enemy_near_few">>
+<<set $enemy_list to $near_few_list.random()>>
+<<set $encounter2["enemy"] to $enemy_list[0]>>
+<<set $encounter2["enemy_article"] to $enemy_list[1]>>
+<<set $encounter2["enemy_description"] to $enemy_list[2]>>
+<<elseif $encounter2["type"] is "enemy_near_many">>
+<<set $enemy_list to $near_many_list.random()>>
+<<set $encounter2["enemy"] to $enemy_list[0]>>
+<<set $encounter2["enemy_article"] to $enemy_list[1]>>
+<<set $encounter2["enemy_description"] to $enemy_list[2]>>
+<<elseif $encounter2["type"] is "enemy_far_few">>
+<<set $enemy_list to $far_few_list.random()>>
+<<set $encounter2["enemy"] to $enemy_list[0]>>
+<<set $encounter2["enemy_article"] to $enemy_list[1]>>
+<<set $encounter2["enemy_description"] to $enemy_list[2]>>
+<<elseif $encounter2["type"] is "enemy_far_many">>
+<<set $enemy_list to $far_many_list.random()>>
+<<set $encounter2["enemy"] to $enemy_list[0]>>
+<<set $encounter2["enemy_article"] to $enemy_list[1]>>
+<<set $encounter2["enemy_description"] to $enemy_list[2]>>
+<<endif>>
+
+<<set $encounters  to $encounters + 1>>
+
+<<endsilently>>
+
+Before you is a fork in the road. Both paths will bring you closer to your destination.
+
+To the left <<if $encounter1["type"] is "enemy_near_few">>
+you see a large figure blocking your path just ahead.
+<<elseif $encounter1["type"] is "enemy_near_many">>
+you hear rustling and growling around a bend in the road.
+<<elseif $encounter1["type"] is "enemy_far_few">>
+you see a long bridge over a ravine, and a figure blocking your path.
+<<elseif $encounter1["type"] is "enemy_far_many">>
+you hear a loud commotion coming from down the road.
+<<elseif $encounter1["type"] is "town_shop">>
+you see a sign indicating there is a town ahead.
+<<elseif $encounter1["type"] is "help">>
+you hear a cry for help coming from down the road.
+<<elseif $encounter1["type"] is "loot">>
+you see signs of a camp of some sort nearby.
+<<else>>
+you see the path go into a tunnel, with a strange door blocking the way
+<<endif>>
+
+To the right <<if $encounter2["type"] is "enemy_near_few">>
+you see a large figure blocking your path just ahead.
+<<elseif $encounter2["type"] is "enemy_near_many">>
+you hear rustling and growling around a bend in the road.
+<<elseif $encounter2["type"] is "enemy_far_few">>
+you see a long bridge over a ravine, and a figure blocking your path.
+<<elseif $encounter2["type"] is "enemy_far_many">>
+you hear a loud commotion coming from down the road.
+<<elseif $encounter2["type"] is "town_shop">>
+you see a sign indicating there is a town ahead.
+<<elseif $encounter2["type"] is "help">>
+you hear a cry for help coming from down the road.
+<<elseif $encounter2["type"] is "loot">>
+you see signs of a camp of some sort nearby.
+<<else>>
+you see the path go into a tunnel, with a strange door blocking the way
+<<endif>>
+
+Which path do you choose?
+
+[[Take the left path|Choose Left]]
+[[Take the right path|Choose Right]]
+
+<<endif>>
+
+:: Choose Left
+<<silently>>
+<<set $encounter["type"] to $encounter1["type"]>>
+<<set $encounter["enemy"] to $encounter1["enemy"]>>
+<<set $encounter["enemy_article"] to $encounter1["enemy_article"]>>
+<<set $encounter["enemy_description"] to $encounter1["enemy_description"]>>
+<<set $encounter["enemy_health"] to $encounter1["enemy_health"]>>
+<<set $encounter["enemy_damage"] to $encounter1["enemy_damage"]>>
+<<set $encounter["sword_damage"] to $encounter1["sword_damage"]>>
+<<set $encounter["bow_damage"] to $encounter1["bow_damage"]>>
+<<set $encounter["magic_damage"] to $encounter1["magic_damage"]>>
+<<set $encounter["magic_sword_damage"] to $encounter1["magic_sword_damage"]>>
+<<set $encounter["magic_bow_damage"] to $encounter1["magic_bow_damage"]>>
+<<set $encounter["magic_book_damage"] to $encounter1["magic_book_damage"]>>
+<<set $encounter["bribe"] to $encounter1["bribe"]>>
+<<set $encounter["talk"] to $encounter1["talk"]>>
+<<set $encounter["sneak"] to $encounter1["sneak"]>>
+<<set $encounter["wait"] to $encounter1["wait"]>>
+<<set $encounter["loot_1"] to $encounter1["loot_1"]>>
+<<set $encounter["gold_amount"] to $encounter1["gold_amount"]>>
+<<endsilently>>
+You turn left and keep walking.
+
+<<if $encounter["type"] is "enemy_near_few">>
+[[Continue forward.|Enemy Near Few]]
+<<elseif $encounter["type"] is "enemy_near_many">>
+[[Continue forward.|Enemy Near Many]]
+<<elseif $encounter["type"] is "enemy_far_few">>
+[[Continue forward.|Enemy Far Few]]
+<<elseif $encounter["type"] is "enemy_far_many">>
+[[Continue forward.|Enemy Far Many]]
+<<elseif $encounter["type"] is "town_shop">>
+[[Continue forward.|Town]]
+<<elseif $encounter["type"] is "help">>
+[[Continue forward.|Save Woman from Bandits]]
+<<elseif $encounter["type"] is "loot">>
+[[Continue forward.|Loot Camp Start]]
+<<else>>
+[[Continue forward.|Puzzle]]
+<<endif>>
+
+:: Choose Right
+<<silently>>
+<<set $encounter["type"] to $encounter2["type"]>>
+<<set $encounter["enemy"] to $encounter2["enemy"]>>
+<<set $encounter["enemy_article"] to $encounter2["enemy_article"]>>
+<<set $encounter["enemy_description"] to $encounter2["enemy_description"]>>
+<<set $encounter["enemy_health"] to $encounter2["enemy_health"]>>
+<<set $encounter["enemy_damage"] to $encounter2["enemy_damage"]>>
+<<set $encounter["sword_damage"] to $encounter2["sword_damage"]>>
+<<set $encounter["bow_damage"] to $encounter2["bow_damage"]>>
+<<set $encounter["magic_damage"] to $encounter2["magic_damage"]>>
+<<set $encounter["magic_sword_damage"] to $encounter2["magic_sword_damage"]>>
+<<set $encounter["magic_bow_damage"] to $encounter2["magic_bow_damage"]>>
+<<set $encounter["magic_book_damage"] to $encounter2["magic_book_damage"]>>
+<<set $encounter["bribe"] to $encounter2["bribe"]>>
+<<set $encounter["talk"] to $encounter2["talk"]>>
+<<set $encounter["sneak"] to $encounter2["sneak"]>>
+<<set $encounter["wait"] to $encounter2["wait"]>>
+<<set $encounter["loot_1"] to $encounter2["loot_1"]>>
+<<set $encounter["gold_amount"] to $encounter2["gold_amount"]>>
+<<endsilently>>
+You turn right and keep walking.
+
+<<if $encounter["type"] is "enemy_near_few">>
+[[Continue forward.|Enemy Near Few]]
+<<elseif $encounter["type"] is "enemy_near_many">>
+[[Continue forward.|Enemy Near Many]]
+<<elseif $encounter["type"] is "enemy_far_few">>
+[[Continue forward.|Enemy Far Few]]
+<<elseif $encounter["type"] is "enemy_far_many">>
+[[Continue forward.|Enemy Far Many]]
+<<elseif $encounter["type"] is "town_shop">>
+[[Continue forward.|Town]]
+<<elseif $encounter["type"] is "help">>
+[[Continue forward.|Save Woman from Bandits]]
+<<elseif $encounter["type"] is "loot">>
+[[Continue forward.|Loot Camp Start]]
+<<else>>
+[[Continue forward.|Puzzle]]
+<<endif>>
+
+::Win
+As you enter the cave, you come upon a chamber filled with glimmering treasure. Heaps of shimmering gold coins, brilliant jewels of all colors, and magnificent weapons lay before you. Your discovery will surely become legendary.
+
+Congratulations! You found the lost treasure of Bloomrane Cavern!
+
+Thank you for playing! This was Path B of the Treasure of Bloomrane Cavern. If you've already played Path A, please take the survey at the link below. Otherwise, please play Path A before taking the survey.
+https://docs.google.com/forms/d/e/1FAIpQLSd1imv2Pb4gEtDALedTM7B2DaUFVvy_cx2Os8ADKYhrsS5W4Q/viewform?usp=sf_link

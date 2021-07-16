@@ -1,0 +1,196 @@
+::Puzzle
+You enter a clearing and see a tunnel in the side of the cliff face. The road passes through here and there doesn't seem to be any way around. As you approach, however, you see that the entrance to the cave is blocked by a large stone door with a face carved onto it. When you try to open the door, the face springs to life and the door speaks, "To enter the cavern and claim the treasure within, you must first answer my riddle."
+
+<<if $inventory["magicSword"] > 0>> [[Attack the door with your Magic Sword|Puzzle Sword]] <<else>> [[Attack the door with your Rusty Sword|Puzzle Sword]] <<endif>>
+<<if $inventory["magicBow"] > 0>> [[Attack the door with your Magic Bow|Puzzle Bow]] <<else>> [[Attack the door with your Old Bow|Puzzle Bow]] <<endif>>
+<<if $inventory["magicBook"] > 0>> [[Attack the door with a Powerful Spell|Puzzle Magic]] <<else>> [[Attack the door with a Weak Spell|Puzzle Magic]] <<endif>>
+[[Listen to the riddle|Puzzle Talk]]
+<<if $encounter["bribe"]>>[[Try to bribe the door|Puzzle Bribe Succeed]]<<else>>[[Try to bribe the door|Puzzle Bribe Fail]]<<endif>>
+[[Hide from the door|Puzzle Hide]]
+
+::Puzzle Sword
+<<silently>>
+<<set $choices["sword"] to $choices["sword"]+1>>
+<<if $inventory["magicSword"] > 0>>
+<<set $encounter["enemy_health"] to $encounter["enemy_health"] - $encounter["magic_Sword_damage"]>>
+<<else>>
+<<set $encounter["enemy_health"] to $encounter["enemy_health"] - $encounter["Sword_damage"]>>
+<<endif>>
+<<endsilently>>
+<<if $encounter["enemy_health"] <= 0>>
+With all of your strength, you thrust your sword into the gap where the two sides of the door meet. The door yelps in surprise, opening just a little. You quickly dive through the crack and find yourself inside Bloomrane Cavern. You hear a faint sigh and grumbling discontent on the other side of the door.
+[[Enter the cavern|Next Encounter]]
+
+<<else>>
+You strike the door with your sword, leaving the door unscathed but a large chip in your sword. "I'm made of stone. You're just going to ruin that sword." The door chides.
+
+<<if $inventory["magicBow"] > 0>> [[Attack the door with your Magic Bow|Puzzle Bow]] <<else>> [[Attack the door with your Old Bow|Puzzle Bow]] <<endif>>
+<<if $inventory["magicBook"] > 0>> [[Attack the door with a Powerful Spell|Puzzle Magic]] <<else>> [[Attack the door with a Weak Spell|Puzzle Magic]] <<endif>>
+[[Listen to the riddle|Puzzle Talk]]
+<<if $encounter["bribe"]>>[[Try to bribe the door|Puzzle Bribe Succeed]]<<else>>[[Try to bribe the door|Puzzle Bribe Fail]]<<endif>>
+[[Hide from the door|Puzzle Hide]]
+<<endif>>
+
+::Puzzle Bow
+<<silently>>
+<<set $choices["bow"] to $choices["bow"]+1>>
+<<if $inventory["magicBow"] > 0>>
+<<set $encounter["enemy_health"] to $encounter["enemy_health"] - $encounter["magic_bow_damage"]>>
+<<else>>
+<<set $encounter["enemy_health"] to $encounter["enemy_health"] - $encounter["bow_damage"]>>
+<<endif>>
+<<endsilently>>
+<<if $encounter["enemy_health"] <= 0>>
+You fire several arrows at the door. "Ha! That tickles!" the door giggles. Determined, you continue firing. The door suddenly bursts open, laughing uncontrollably. You quickly dive through the crack and find yourself inside Bloomrane Cavern. The door manages to compose itself, and you hear a faint sigh and grumbling discontent behind you.
+[[Enter the cavern|Next Encounter]]
+
+<<else>>
+You fire arrow after arrow at the door to no effect. "Ha! That tickles!" The door laughs. You aren't sure if he's mocking you, or if that does actually tickle.
+
+<<if $inventory["magicSword"] > 0>> [[Attack the door with your Magic Sword|Puzzle Sword]] <<else>> [[Attack the door with your Rusty Sword|Puzzle Sword]] <<endif>>
+<<if $inventory["magicBook"] > 0>> [[Attack the door with a Powerful Spell|Puzzle Magic]] <<else>> [[Attack the door with a Weak Spell|Puzzle Magic]] <<endif>>
+[[Listen to the riddle|Puzzle Talk]]
+<<if $encounter["bribe"]>>[[Try to bribe the door|Puzzle Bribe Succeed]]<<else>>[[Try to bribe the door|Puzzle Bribe Fail]]<<endif>>
+[[Hide from the door|Puzzle Hide]]
+<<endif>>
+
+
+::Puzzle Magic
+<<silently>>
+<<set $choices["magic"] to $choices["magic"]+1>>
+<<if $inventory["magicBook"] > 0>>
+<<set $encounter["enemy_health"] to $encounter["enemy_health"] - $encounter["magic_book_damage"]>>
+<<else>>
+<<set $encounter["enemy_health"] to $encounter["enemy_health"] - $encounter["magic_damage"]>>
+<<endif>>
+<<endsilently>>
+<<if $encounter["enemy_health"] <= 0>>
+You charge a powerful spell and cast it at the door. "Ahh!" it yelps, seemingly out of surprise more than anything else. The door begins to open, reacting to your magic. "Wait, that's not supposed to happen!" the door shouts as the face is obscured from view, leaving a clear and open entryway into Bloomrane Cavern.
+
+[[Enter the cavern|Next Encounter]]
+<<else>>
+A gust of flame erupts from your hand and does absolutely nothing because this is a solid stone door. "Are you done? Did you get it all out of your system?" it asks.
+
+<<if $inventory["magicSword"] > 0>> [[Attack the door with your Magic Sword|Puzzle Sword]] <<else>> [[Attack the door with your Rusty Sword|Puzzle Sword]] <<endif>>
+<<if $inventory["magicBow"] > 0>> [[Attack the door with your Magic Bow|Puzzle Bow]] <<else>> [[Attack the door with your Old Bow|Puzzle Bow]] <<endif>>
+[[Listen to the riddle|Puzzle Talk]]
+<<if $encounter["bribe"]>>[[Try to bribe the door|Puzzle Bribe Succeed]]<<else>>[[Try to bribe the door|Puzzle Bribe Fail]]<<endif>>
+[[Hide from the door|Puzzle Hide]]
+
+<<endif>>
+
+::Puzzle Bribe Fail
+<<silently>>
+<<set $choices["bribe"] to $choices["bribe"]+1>>
+<<endsilently>>
+You try to offer some of your treasure and items to the door. "I'm a stone door; what could you possibly offer me I would want?" it scoffs.
+
+<<if $inventory["magicSword"] > 0>> [[Attack the door with your Magic Sword|Puzzle Sword]] <<else>> [[Attack the door with your Rusty Sword|Puzzle Sword]] <<endif>>
+<<if $inventory["magicBow"] > 0>> [[Attack the door with your Magic Bow|Puzzle Bow]] <<else>> [[Attack the door with your Old Bow|Puzzle Bow]] <<endif>>
+<<if $inventory["magicBook"] > 0>> [[Attack the door with a Powerful Spell|Puzzle Magic]] <<else>> [[Attack the door with a Weak Spell|Puzzle Magic]] <<endif>>
+[[Listen to the riddle|Puzzle Talk]]
+[[Hide from the door|Puzzle Hide]]
+
+
+::Puzzle Bribe Succeed
+<<silently>>
+<<set $choices["bribe"] to $choices["bribe"]+1>>
+<<endsilently>>
+You try to offer some of your treasure and items to the door. "I'm a stone door. Why would I want anything you're offering me?," it scoffs. Desperate, you take off the ring you've been wearing. It's a family heiroom, passed down for generations, and your most precious possession. You've worn it every day for as long as you can remember. You plead your case to the door; it contemplates your offer. "Alright, fine. If you want to pass through that badly, I'll let you through."
+[[Surrender your ring and enter the cavern|Next Encounter]]
+<<if $inventory["magicSword"] > 0>> [[Attack the door with your Magic Sword|Puzzle Sword]] <<else>> [[Attack the door with your Rusty Sword|Puzzle Sword]] <<endif>>
+<<if $inventory["magicBow"] > 0>> [[Attack the door with your Magic Bow|Puzzle Bow]] <<else>> [[Attack the door with your Old Bow|Puzzle Bow]] <<endif>>
+<<if $inventory["magicBook"] > 0>> [[Attack the door with a Powerful Spell|Puzzle Magic]] <<else>> [[Attack the door with a Weak Spell|Puzzle Magic]] <<endif>>
+[[Listen to the riddle|Puzzle Talk]]
+<<if $encounter["bribe"]>>[[Try to bribe the door|Puzzle Bribe Succeed]]<<else>>[[Try to bribe the door|Puzzle Bribe Fail]]<<endif>>
+[[Hide from the door|Puzzle Hide]]
+
+
+::Puzzle Hide
+<<silently>>
+<<set $choices["hide"] to $choices["hide"]+1>>
+<<endsilently>>
+Seeing as the door has already seen you, and as there is nothing large enough nearby to hide behind, you simply crouch down in the hopes that the door won't be able to see you anymore.
+
+"I can still see you," the door says, exasperated. "What is it you hope to accomplish with this?"
+
+<<if $encounter["sneak"]>>[[Try to sneak past the door|Puzzle Sneak Succeed]]<<else>>[[Try to sneak past the door|Puzzle Sneak Fail]]<<endif>>
+<<if $encounter["wait"]>>[[Wait|Puzzle Wait Succeed]]<<else>>[[Wait|Puzzle Wait Fail]]<<endif>>
+<<if $inventory["magicSword"] > 0>> [[Attack the door with your Magic Sword|Puzzle Sword]] <<else>> [[Attack the door with your Rusty Sword|Puzzle Sword]] <<endif>>
+<<if $inventory["magicBow"] > 0>> [[Attack the door with your Magic Bow|Puzzle Bow]] <<else>> [[Attack the door with your Old Bow|Puzzle Bow]] <<endif>>
+<<if $inventory["magicBook"] > 0>> [[Attack the door with a Powerful Spell|Puzzle Magic]] <<else>> [[Attack the door with a Weak Spell|Puzzle Magic]] <<endif>>
+[[Listen to the riddle|Puzzle Talk]]
+<<if $encounter["bribe"]>>[[Try to bribe the door|Puzzle Bribe Succeed]]<<else>>[[Try to bribe the door|Puzzle Bribe Fail]]<<endif>>
+
+::Puzzle Sneak Fail
+<<silently>>
+<<set $choices["sneak"] to $choices["sneak"]+1>>
+<<endsilently>>
+As you try to sneak past, you realize that you can't. There is only one entrance and it is blocked by a very solid, very closed door. And the door can see you.
+
+<<if $inventory["magicSword"] > 0>> [[Attack the door with your Magic Sword|Puzzle Sword]] <<else>> [[Attack the door with your Rusty Sword|Puzzle Sword]] <<endif>>
+<<if $inventory["magicBow"] > 0>> [[Attack the door with your Magic Bow|Puzzle Bow]] <<else>> [[Attack the door with your Old Bow|Puzzle Bow]] <<endif>>
+<<if $inventory["magicBook"] > 0>> [[Attack the door with a Powerful Spell|Puzzle Magic]] <<else>> [[Attack the door with a Weak Spell|Puzzle Magic]] <<endif>>
+[[Listen to the riddle|Puzzle Talk]]
+<<if $encounter["bribe"]>>[[Try to bribe the door|Puzzle Bribe Succeed]]<<else>>[[Try to bribe the door|Puzzle Bribe Fail]]<<endif>>
+[[Hide from the door|Puzzle Hide]]
+
+::Puzzle Sneak Succeed
+<<silently>>
+<<set $choices["sneak"] to $choices["sneak"]+1>>
+<<endsilently>>
+You look around and notice a crevice in the stone wall of the cliff. It looks just large enough for you to fit through. Turning sideways, you manage to squeeze through the gap.
+[[Enter the cavern|Next Encounter]]
+
+
+::Puzzle Wait Succeed
+<<silently>>
+<<set $choices["wait"] to $choices["wait"]+1>>
+<<endsilently>>
+You stay in the same position and wait. "Seriously, I can see you! I'm a door; I'm not going anywhere. I'm not even capable of leaving!" the door taunts. You continue to wait. Hours pass, the door growing increasingly frustrated, and seemingly, a bit tired. In one fateful moment, the door yawns, opening just a little, and you dive through the crack into the cavern beyond. You hear a faint sigh and grumbling discontent on the other side of the door.
+
+[[Enter the cavern|Next Encounter]]
+
+
+::Puzzle Wait Fail
+<<silently>>
+<<set $choices["wait"] to $choices["wait"]+1>>
+<<endsilently>>
+You stay in the same position and wait.  "Seriously, I can see you! I'm a door; I'm not going anywhere. I'm not even capable of leaving!" the door taunts. Determined, you continue waiting. You lose track of time. Has it been minutes? Hours? Days? The door remains firmly closed. Eventually, you decide to try a different approach.
+
+<<if $encounter["sneak"]>>[[Try to sneak past the door|Puzzle Sneak Succeed]]<<else>>[[Try to sneak past the door|Puzzle Sneak Fail]]<<endif>>
+<<if $inventory["magicSword"] > 0>> [[Attack the door with your Magic Sword|Puzzle Sword]] <<else>> [[Attack the door with your Rusty Sword|Puzzle Sword]] <<endif>>
+<<if $inventory["magicBow"] > 0>> [[Attack the door with your Magic Bow|Puzzle Bow]] <<else>> [[Attack the door with your Old Bow|Puzzle Bow]] <<endif>>
+<<if $inventory["magicBook"] > 0>> [[Attack the door with a Powerful Spell|Puzzle Magic]] <<else>> [[Attack the door with a Weak Spell|Puzzle Magic]] <<endif>>
+[[Listen to the riddle|Puzzle Talk]]
+<<if $encounter["bribe"]>>[[Try to bribe the door|Puzzle Bribe Succeed]]<<else>>[[Try to bribe the door|Puzzle Bribe Fail]]<<endif>>
+
+::Puzzle Talk
+<<silently>>
+<<set $choices["talk"] to $choices["talk"]+1>>
+<<endsilently>>
+The door clears its throat and begins. "I have a bed, but do not sleep. I have a mouth, but cannot eat. I run, but have no feet. What am I?"
+
+<<textbox "$response" "" "Puzzle Answer">>
+
+:: Puzzle Answer
+<<set $response to $response.toLowerCase()>>
+<<if $response == "river">> <<goto "Puzzle Right">>
+<<elseif $response == "a river">> <<goto "Puzzle Right">>
+<<else>> <<goto "Puzzle Wrong">> <<endif>>
+
+::Puzzle Wrong
+"Ha! Not even close!" the door mocks.
+
+<<if $inventory["magicSword"] > 0>> [[Attack the door with your Magic Sword|Puzzle Sword]] <<else>> [[Attack the door with your Rusty Sword|Puzzle Sword]] <<endif>>
+<<if $inventory["magicBow"] > 0>> [[Attack the door with your Magic Bow|Puzzle Bow]] <<else>> [[Attack the door with your Old Bow|Puzzle Bow]] <<endif>>
+<<if $inventory["magicBook"] > 0>> [[Attack the door with a Powerful Spell|Puzzle Magic]] <<else>> [[Attack the door with a Weak Spell|Puzzle Magic]] <<endif>>
+[[Listen to the riddle again|Puzzle Talk]]
+<<if $encounter["bribe"]>>[[Try to bribe the door|Puzzle Bribe Succeed]]<<else>>[[Try to bribe the door|Puzzle Bribe Fail]]<<endif>>
+[[Hide from the door|Puzzle Hide]]
+
+
+::Puzzle Right
+"Ha! you're not ev... oh, wait, you actually got it. Huh, no one's ever gotten it right before. I guess, go in?" The door opens, allowing you entry.
+
+[[Enter the cavern|Next Encounter]]
